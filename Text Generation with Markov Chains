@@ -1,0 +1,39 @@
+import random
+
+# Sample text
+text = """
+In a village of La Mancha, the name of which I have no desire to call to mind, there lived not long since one of those gentlemen that keep a lance in the lance-rack, an old buckler, a lean hack, and a greyhound for coursing. An olla of rather more beef than mutton, a salad on most nights, scraps on Saturdays, lentils on Fridays, and a pigeon or so extra on Sundays, made away with three-quarters of his income.
+"""
+
+# Clean the text: remove newlines and unnecessary spaces
+text = text.replace("\n", " ").replace("  ", " ").strip()
+
+def build_markov_chain(text):
+    words = text.split(' ')
+    markov_chain = {}
+    
+    for i in range(len(words) - 1):
+        word = words[i]
+        next_word = words[i + 1]
+        
+        if word not in markov_chain:
+            markov_chain[word] = []
+        
+        markov_chain[word].append(next_word)
+    
+    return markov_chain
+
+def generate_text(chain, length=50):
+    # Choose a random word to start
+    word = random.choice(list(chain.keys()))
+    output = [word]
+    
+    for _ in range(length - 1):
+        word = random.choice(chain[word])
+        output.append(word)
+    
+    return ' '.join(output)
+
+markov_chain = build_markov_chain(text)
+generated_text = generate_text(markov_chain, length=50)
+print(generated_text)
